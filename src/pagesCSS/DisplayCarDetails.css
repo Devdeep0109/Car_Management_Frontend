@@ -1,0 +1,38 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+.displayDetails{
+    width: 100vw;
+    height: fit-content;
+    padding: 1rem;
+    background-color:rgb(231,233,235);
+}
+.innerdiv1{
+    background-color: white;
+    width: 100%;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+.innerdiv2{
+    background-color: white;
+    width: 100%;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+.innerdiv3{
+    background-color: white;
+    width: 100%;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+.commentInput{
+    border: 2px solid black;
+    border-radius: .5rem;
+}
+
+@media screen and (max-width:1200px){
+    .displayDetails{
+        height:100vh;
+    }
+}

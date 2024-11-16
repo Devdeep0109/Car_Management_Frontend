@@ -1,0 +1,18 @@
+.commmentButton{
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    border-radius: .4rem;
+    border: none;
+    cursor: pointer;
+}
+.commentInput{
+    padding: .5rem;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
