@@ -2,12 +2,17 @@ import { MdOutlineLocationOn } from "react-icons/md";
 import "../pagesCSS/DisplayCarDetails.css";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import UserContext from "../UseContext";
+import { IoLocationOutline } from "react-icons/io5";
+import { IoLogoModelS } from "react-icons/io";
+import { GrOrganization } from "react-icons/gr";
+import { FaInfo } from "react-icons/fa";
 
 const DisplayCarDetails = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  console.log(id);
+  const { user } = useContext(UserContext);
 
   //storing car data.........
   const [car, setCarDetails] = useState();
@@ -19,6 +24,7 @@ const DisplayCarDetails = () => {
         .then((result) => {
           if (result.status == 200) {
             setCarDetails(result.data.data);
+            console.log(result.data.data);
           } else {
             alert(result.data.error);
           }
@@ -54,28 +60,40 @@ const DisplayCarDetails = () => {
 
   return (
     <div className="displayDetails">
-      <div className="details">
-        <div className="innerdiv1">
-          <h2>{car.title}</h2>
-          <Link to={`/editcar/${car._id}`}>Edit</Link> &nbsp;
-          <button onClick={handleDelete}>Delete</button>
-          <div>
-            <MdOutlineLocationOn />
-            <b>{car.address}</b>
+      <div className="single">
+        <h1 className="">{car.title}</h1>
+        <div className="display">
+          <div className="image">
+            <img src={car.coverImage} alt="" />
           </div>
-        </div>
-
-        <div className="innerdiv2">
-          <div className="information">
+          <div className="details">
+            <p>Rs. {car.price}</p>
             <p>
-              Additional Information: <b>{car.additionalInfo}</b>
+              <IoLocationOutline /> &nbsp;&nbsp;
+              {car.address}
             </p>
+            <p>
+              <IoLogoModelS /> &nbsp;&nbsp;
+              {car.car_type}
+            </p>
+            <p>
+              <GrOrganization /> &nbsp;&nbsp;
+              {car.company}
+            </p>
+            <p>
+              <FaInfo /> &nbsp;&nbsp;
+              {car.additionalInfo}
+            </p>
+
+            {user.id == car.createdBy._id && (
+              <div className="action">
+                <Link to={`/editcar/${car._id}`}>Edit</Link>
+                <button onClick={handleDelete}>Delete</button>
+              </div>
+            )}
           </div>
         </div>
       </div>
-
-      {/* right */}
-      <div className="photos"></div>
     </div>
   );
 };
