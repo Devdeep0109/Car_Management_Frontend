@@ -151,7 +151,7 @@ const CarDetails = () => {
           <label htmlFor="">Additional Information</label>
           <input
             type="text"
-            placeholder="clean and cheap food"
+            placeholder="Fast and Efficient"
             value={additionalInfo}
             onChange={(e) => {
               setAddInfo(e.target.value);
