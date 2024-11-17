@@ -24,7 +24,7 @@ function App() {
   const getUser = async () => {
     try {
       axios
-        .get("http://localhost:8000/api/profile", {
+        .get("https://car-management-backend-six.vercel.app/api/profile", {
           headers: {
             Authorization: `Bearer ${Cookies.get("token")}`,
           },

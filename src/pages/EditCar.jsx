@@ -1,10 +1,8 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "../pagesCSS/CarDetails.css";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import Cookies from "js-cookie";
-import UserContext from "../UseContext";
-
 const EditCar = () => {
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
@@ -18,76 +16,67 @@ const EditCar = () => {
 
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
+  const handleUpload = async (file, type) => {
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", "car_image");
+      let api = `https://api.cloudinary.com/v1_1/dj5vb9guv/${type}/upload`;
+
+      const response = await fetch(api, {
+        method: "POST",
+        body: formData,
+      });
+      const result = await response.json();
+
+      const secure_url = result.secure_url;
+      console.log(secure_url);
+
+      return secure_url;
+    } catch (error) {
+      console.error("Error creating post:", error);
+    }
+  };
+
+  const handleChange = async (e) => {
     e.preventDefault();
-
-    let data = {
-      title,
-      price,
-      car_type,
-      company,
-      address,
-      additionalInfo,
-    };
-
-    console.log(data);
-
-    console.log("Cover Image: ", coverimage);
+    const fileURL = await handleUpload(coverimage, "image");
 
     //logic to send data to backend
-    if (coverimage != "")
-      axios
-        .post(
-          `http://localhost:8000/car/editcar/${id}`,
-          { coverimage, data },
-          {
-            headers: {
-              Authorization: `Bearer ${Cookies.get("token")}`,
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        )
-        .then((result) => {
-          console.log("Car: ", result);
-          if (result.status == 200) {
-            navigate("/");
-          } else {
-            alert(result.err);
-          }
-        })
-        .catch((err) => {
-          alert(err.message);
-        });
-    else {
-      axios
-        .post(
-          `http://localhost:8000/car/editcar-no-image/${id}`,
-          { data },
-          {
-            headers: {
-              Authorization: `Bearer ${Cookies.get("token")}`,
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        )
-        .then((result) => {
-          console.log("Car: ", result);
-          if (result.status == 200) {
-            navigate("/");
-          } else {
-            alert(result.err);
-          }
-        })
-        .catch((err) => {
-          alert(err.message);
-        });
-    }
+
+    fetch(`https://car-management-backend-six.vercel.app/car/editcar/${id}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${Cookies.get("token")}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title: title,
+        price: price,
+        car_type: car_type,
+        company: company,
+        address: address,
+        additionalInfo: additionalInfo,
+        fileURL: coverimage == "" ? null : fileURL,
+      }),
+    })
+      .then((result) => {
+        console.log("Car: ", result);
+        if (result.status == 200) {
+          navigate("/");
+        } else {
+          alert(result.err);
+        }
+      })
+      .catch((err) => {
+        alert(err.message);
+      });
   };
 
   useEffect(() => {
     if (id) {
       axios
-        .get(`http://localhost:8000/car/single/${id}`)
+        .get(`https://car-management-backend-six.vercel.app/car/single/${id}`)
         .then(async (result) => {
           if (result.status == 200) {
             const car = result.data.data;

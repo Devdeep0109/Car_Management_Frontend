@@ -4,11 +4,25 @@
     margin: 2rem;
     text-align: center;
     font-family: arial;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-between;
   }
+.card img{
+  width: 100%;
+}
+.card p{
+  line-height: .6;
+}
   
   .price {
-    font-weight: 900;
+    font-weight: 700;
     font-size: 1.2rem;
+  }
+  .card a{
+    bottom: 0;
+    width: 100%;
   }
   
   .card button {

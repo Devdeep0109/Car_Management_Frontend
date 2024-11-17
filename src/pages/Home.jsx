@@ -12,7 +12,7 @@ const Home = () => {
   const getAllCar = async () => {
     try {
       axios
-        .get("http://localhost:8000/car/allcar", {
+        .get("https://car-management-backend-six.vercel.app/car/allcar", {
           headers: {
             Authorization: `Bearer ${Cookies.get("token")}`,
           },
@@ -30,7 +30,7 @@ const Home = () => {
     getAllCar();
   }, []);
   return (
-    <div>
+    <div className="home">
       <input
         className="search"
         value={searchVal}
@@ -39,12 +39,6 @@ const Home = () => {
       />
 
       <div className="mainComponent">
-        {/* {data.map((mess,i)=>
-        <>
-          <p key={i}>{mess.title}</p>
-        </>
-      )} */}
-
         {data.length > 0 &&
           data &&
           data

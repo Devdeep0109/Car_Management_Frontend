@@ -5,35 +5,6 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 const DisplayCarDetails = () => {
-  // Comment useState
-  // const [commentinfo, setCommentInfo] = useState("");
-
-  // const { user } = useContext(UserContext);
-
-  // const user_id = user.id;
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   const data = {
-  //     carId: id,
-  //     createdBy: user_id,
-  //     content: commentinfo,
-  //   };
-  //   console.log("Data from handleSubmit", data);
-  //   try {
-  //     axios
-  //       .post("http://localhost:8000/comment/createComments", { data })
-  //       .then((res) => {
-  //         if (res.status == 200) {
-  //           console.log(res);
-  //           // fetchComments()
-  //         }
-  //       })
-  //       .catch((err) => console.log(err));
-  //   } catch (error) {
-  //     alert(error.message);
-  //   }
-  // };
   const navigate = useNavigate();
   const { id } = useParams();
   console.log(id);
@@ -44,7 +15,7 @@ const DisplayCarDetails = () => {
   useEffect(() => {
     if (id) {
       axios
-        .get(`http://localhost:8000/car/single/${id}`)
+        .get(`https://car-management-backend-six.vercel.app/car/single/${id}`)
         .then((result) => {
           if (result.status == 200) {
             setCarDetails(result.data.data);
@@ -65,7 +36,7 @@ const DisplayCarDetails = () => {
 
   const handleDelete = () => {
     axios
-      .post(`http://localhost:8000/car/deletecar/${id}`)
+      .post(`https://car-management-backend-six.vercel.app/car/deletecar/${id}`)
       .then((result) => {
         console.log(result);
 
@@ -83,23 +54,28 @@ const DisplayCarDetails = () => {
 
   return (
     <div className="displayDetails">
-      <div className="innerdiv1">
-        <h2>{car.title}</h2>
-        <Link to={`/editcar/${car._id}`}>Edit</Link> &nbsp;
-        <button onClick={handleDelete}>Delete</button>
-        <div>
-          <MdOutlineLocationOn />
-          <b>{car.address}</b>
+      <div className="details">
+        <div className="innerdiv1">
+          <h2>{car.title}</h2>
+          <Link to={`/editcar/${car._id}`}>Edit</Link> &nbsp;
+          <button onClick={handleDelete}>Delete</button>
+          <div>
+            <MdOutlineLocationOn />
+            <b>{car.address}</b>
+          </div>
+        </div>
+
+        <div className="innerdiv2">
+          <div className="information">
+            <p>
+              Additional Information: <b>{car.additionalInfo}</b>
+            </p>
+          </div>
         </div>
       </div>
 
-      <div className="innerdiv2">
-        <div className="information">
-          <p>
-            Additional Information: <b>{car.additionalInfo}</b>
-          </p>
-        </div>
-      </div>
+      {/* right */}
+      <div className="photos"></div>
     </div>
   );
 };

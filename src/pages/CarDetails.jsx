@@ -1,6 +1,5 @@
 import { useContext, useState } from "react";
 import "../pagesCSS/CarDetails.css";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import UserContext from "../UseContext";
@@ -19,36 +18,58 @@ const CarDetails = () => {
 
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
+  const handleUpload = async (file, type) => {
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", "car_image");
+      let api = `https://api.cloudinary.com/v1_1/dj5vb9guv/${type}/upload`;
+
+      const response = await fetch(api, {
+        method: "POST",
+        body: formData,
+      });
+      const result = await response.json();
+
+      const secure_url = result.secure_url;
+      console.log(secure_url);
+
+      return secure_url;
+    } catch (error) {
+      console.error("Error creating post:", error);
+    }
+  };
+
+  const handleChange = async (e) => {
     e.preventDefault();
     const id = user.id;
 
-    let data = {
-      title,
-      price,
-      car_type,
-      company,
-      address,
-      additionalInfo,
-      id,
-    };
-
-    console.log(data);
-
     console.log("Cover Image: ", coverimage);
+    const fileURL = await handleUpload(coverimage, "image");
+    console.log(title);
 
     //logic to send data to backend
-    axios
-      .post(
-        "http://localhost:8000/car/CarDetails",
-        { coverimage, data },
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("token")}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      )
+    fetch(
+      "http://localhost:8000/car/CarDetails",
+
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${Cookies.get("token")}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title: title,
+          price: price,
+          car_type: car_type,
+          company: company,
+          address: address,
+          additionalInfo: additionalInfo,
+          id: id,
+          fileURL: fileURL,
+        }),
+      }
+    )
       .then((result) => {
         console.log("Car: ", result);
         if (result.status == 200) {
